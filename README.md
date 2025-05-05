@@ -1,4 +1,5 @@
 # modulo1_s3
+```python
 estudiantes = { }                                           # Se crea el diccionario vacío para ingresar como key estudiante                       
 wile_agregar_estudiante_menu = True                                  
 nota = int                                                  #se define nota como un entero                                           
@@ -291,3 +292,4 @@ while wile_agregar_estudiante_menu:                     #while para devolverse a
                     else:
                         print("Esa nota no aparece, intentelo de nuevo")
                         print("---"*30)
+```
