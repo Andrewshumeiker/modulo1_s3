@@ -60,7 +60,34 @@ def main():
     print(f"el numero de vocales es: {contar_vocales("arepa")}")
     print(f"el factorial es {factorial(5)}")
     print(f"el texto reconocer es palindromo: {es_palindromo("reconocer")}")
+
     print(f"los 10 primeros terminos de la serie de fibonacci son:  {fibonacci(10)}")
     print(f"el valor en fahrenheit es: {celsius_a_fahrenheit(0)}")
+main()
+```
+###libros
+```python
+def condicion ():
+def main ():
+    while True:
+    print("\nmenú de opciones")
+    print("1. Registrar nuevos libros")
+    print("2. Buscar libros")
+    print("3. Actualizar información")
+    print("4. Eliminar libros")
+    print("5. Generar reporte")
+    
+    if opcion == "1":
+        registrar()
+    elif opcion == "2":
+        search()
+    elif opcion == "3":
+        area_cricle()
+    elif opcion == "4":
+        par()
+    elif opcion == "5":
+        elderly()
+
+        
 main()
 ```
