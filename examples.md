@@ -209,3 +209,7 @@ def main():
             print("Opción no válida, intenta de nuevo.")  
 main()
 ```
+#.keys()
+#.items()
+#.values()
+#.get()
