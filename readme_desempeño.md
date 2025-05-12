@@ -337,3 +337,55 @@ def main():
 
 main()
 ```
+```python
+def update():
+    name = input("Enter the product name to update: ")
+    for product in products:
+        if product['name'].lower() == name.lower():
+            field = input("What do you want to update? (price/quantity): ").lower()
+            if field == 'price':
+                try:
+                    new_price = float(input("Enter the new price: "))
+                    if new_price <= 0:
+                        print("Price must be a positive number.")
+                        return
+                    product['price'] = new_price
+                    print(f"Price updated successfully to {new_price}.")
+                except ValueError:
+                    print("Invalid price.")
+                return
+            elif field == 'quantity':
+                try:
+                    new_quantity = int(input("Enter the new quantity: "))
+                    if new_quantity < 0:
+                        print("Quantity must be zero or a positive number.")
+                        return
+                    product['quantity'] = new_quantity
+                    print(f"Quantity updated successfully to {new_quantity}.")
+                except ValueError:
+                    print("Invalid quantity.")
+                return
+            else:
+                print("Invalid option. Choose 'price' or 'quantity'.")
+                return
+    print(f"Product '{name}' not found in inventory.")
+    
+def delete():
+    name = input("Enter the product name to delete: ")
+    for product in products:
+        if product['name'].lower() == name.lower():
+            confirm = input(f"Are you sure you want to delete '{name}'? (yes/no): ").lower()
+            if confirm == 'yes':
+                products.remove(product)
+                print(f"Product '{name}' deleted successfully.")
+            else:
+                print("Deletion cancelled.")
+            return
+    print(f"Product '{name}' not found in inventory.")
+def generate():
+    total = 0
+    for product in products:
+        total += float(product['price']) * int(product['quantity'])
+    print(f"Total inventory value: ${total:.2f}")
+```
+    
