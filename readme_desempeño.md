@@ -7,35 +7,52 @@ products = [
     {"name":"desodorante","quantity":"50","price":"4490"},
     {"name":"electrolit","quantity":"250","price":"8700"},
 ]
-def register(): #function to register products
-  print ("\n---Register a new product---")
-  name = input("Enter product name ").strip()
-  try: #If an invalid value is entered, it will display an error.
-     quantity = int(input("Enter the quantity of products "))
-     if quantity < 0: #tests whether the quantity is a positive integer
-        print("Invalid quantity. Please enter a valid quantity")
+def register():
+    print("\n--- Register a new product ---")
+    name = input("Enter product name: ").strip()
+    if not name:
+        print("Product name cannot be empty.")
         return
-  except ValueError:
-     print("Invalid input. quantity must be a number. ")
-  try: #If an invalid value is entered, it will display an error.
-     price = float(input("Enter price: "))
-     if price <= 0:  #validates that the entered value is a positive decimal
-        print("Invalid price. Price must be a positive number")
+
+    # Validate quantity
+    try:
+        quantity_input = input("Enter the quantity of products: ").strip()
+        if not quantity_input:
+            raise ValueError
+        quantity = int(quantity_input)
+        if quantity <= 0:
+            print("Quantity must be a positive number.")
+            return
+    except ValueError:
+        print("Invalid input. Quantity must be a positive number.")
         return
-  except ValueError:
-     print("Invalid input. price must be a number. ")
-  for product in products: #Validates if the entered name already appears in the inventory, in which case it will display a message
-      if product['name'].lower() == name.lower():
-          print(" product already exist in the inventory. ")
-          return
-  new_product = { #add the product to the dictionary
-      "name": name,
-      "quantity": quantity,
-      "price": round(price,2)
-  }    
-  products.append(new_product) #shows that the product has already been registered
-  print(f"\nProduct'{name}'registered successfully. ")
-  main()
+
+    # Validate price
+    try:
+        price_input = input("Enter price: ").strip()
+        if not price_input:
+            raise ValueError
+        price = float(price_input)
+        if price <= 0:
+            print("Price must be greater than zero.")
+            return
+    except ValueError:
+        print("Invalid input. Price must be a decimal number.")
+        return
+
+    # Duplicate name check
+    for product in products:
+        if product['name'].lower() == name.lower():
+            print("Product already exists in the inventory.")
+            return
+
+    new_product = {
+        "name": name,
+        "quantity": quantity,
+        "price": round(price, 2)
+    }
+    products.append(new_product)
+    print(f"\nProduct '{name}' registered successfully.")
 def search(): #function to search for a product
    print("\n---Search Product---")
    ask = input("Enter product name to search: ").strip().lower()
@@ -106,81 +123,63 @@ def delete(): #function to delete products
          print("Deletion cancelled")
    else:
       print("product not found.")
-def generate(): #function to generate the inventory report
-   try:
-     action = str(input("Do you want to see inventory report?: (yes/no)\n")).strip().lower()
-     if action == "no":
-        main()
-     elif action == "yes":
-        print("\n---Report inventory---")
-        total_cost = 0
-        for product in products.values():
-           cost =product['quantity'] * product['price']
-           total_cost += cost
-           print(f"{product['name']} - {product['quantity']} units - $ {cost}")
-        print(f"Total inventory price: ${total_cost}") #Displays the inventory and price report
-   except ValueError: #if an invalid value is entered it displays an error
-     print("invalid value, must be (yes/no)") 
-def main (): #main menu function
+def generate():
+    print("\n--- Inventory Report ---")
+    action = input("Do you want to see inventory report? (yes/no): ").strip().lower()
+    if action not in ["yes", "no"]:
+        print("Invalid response. Please enter 'yes' or 'no'.")
+        return
+
+    if action == "no":
+        return
+
+    total_cost = 0
+    for product in products:
+        cost = product['quantity'] * product['price']
+        total_cost += cost
+        print(f"{product['name']} - {product['quantity']} units - ${cost:.2f}")
+
+    print(f"Total inventory value: ${total_cost:.2f}")
+def main():
     while True:
-        print("\n ---Options menu---")
+        print("\n--- Options Menu ---")
         print("1. Register new products")
         print("2. Search product")
         print("3. Update information")
-        print("4. Delete product")
-        print("5. generate inventory report")
-        print("6. Exit")
-        opcion = input("Choose an option (1-6): ")
-    #calls the other functions
-        if opcion == "1":
-            register()
-        elif opcion == "2":
-            search()
-        elif opcion == "3":
-            update()
-        elif opcion == "4":
-            delete()
-        elif opcion == "5":
-            generate()    
-        elif opcion == "6":
-            print("see you later! ")
-        break
-    else:
-        print("invalid option try again.\n")
+# Inventory system for managing store products using Python
 
-main()
-```
-```python
-# Dictionary with 5 default products
+# Initial list with 5 default products
 products = [
-    {"name": "sal", "quantity": 100, "price": 2550},
-    {"name": "bocadillo", "quantity": 200, "price": 4990},
-    {"name": "galletas", "quantity": 150, "price": 6250},
-    {"name": "desodorante", "quantity": 50, "price": 4490},
-    {"name": "electrolit", "quantity": 250, "price": 8700},
+    {"name": "salt", "quantity": 100, "price": 2550.00},
+    {"name": "guava candy", "quantity": 200, "price": 4990.00},
+    {"name": "cookies", "quantity": 150, "price": 6250.00},
+    {"name": "deodorant", "quantity": 50, "price": 4490.00},
+    {"name": "electrolyte", "quantity": 250, "price": 8700.00},
 ]
 
 def register():
-    # Function to register a new product
-    print("\n---Register a new product---")
+    print("\n--- Register a new product ---")
     name = input("Enter product name: ").strip()
-    
+    if not name:
+        print("Invalid input. Product name cannot be empty.")
+        return
+
     try:
-        quantity = int(input("Enter the quantity of products: "))
+        quantity = int(input("Enter the quantity: "))
         if quantity < 0:
-            print("Invalid quantity. Please enter a valid quantity.")
+            print("Invalid input. Quantity must be a positive number.")
             return
     except ValueError:
         print("Invalid input. Quantity must be a number.")
         return
 
     try:
-        price = float(input("Enter price: "))
+        price = float(input("Enter the price: "))
         if price <= 0:
-            print("Invalid price. Price must be a positive number.")
+            print("Invalid input. Price must be a positive number.")
             return
     except ValueError:
-        print("Invalid input. Price must be a number.")
+        print("Invalid input. Price must be a decimal number.")
         return
 
     for product in products:
@@ -188,137 +187,115 @@ def register():
             print("Product already exists in the inventory.")
             return
 
-    # Add the new product to the list
-    new_product = {
-        "name": name,
-        "quantity": quantity,
-        "price": round(price, 2)
-    }
+    new_product = {"name": name, "quantity": quantity, "price": round(price, 2)}
     products.append(new_product)
-    print(f"\nProduct '{name}' registered successfully.")
-    main()
+    print(f"Product '{name}' registered successfully.")
 
 def search():
-    # Function to search a product by name
-    print("\n---Search Product---")
-    ask = input("Enter product name to search: ").strip().lower()
+    print("\n--- Search Product ---")
+    name = input("Enter product name to search: ").strip().lower()
+    if not name:
+        print("Invalid input. Name cannot be empty.")
+        return
+
     found = False
-
     for product in products:
-        if ask in product['name'].lower():
-            print(f"\nProduct found:\n"
-                  f"Name: {product['name']}\n"
-                  f"Quantity available: {product['quantity']}\n"
-                  f"Price: ${product['price']}\n")
+        if name in product['name'].lower():
+            print(f"\nProduct found:\nName: {product['name']}\nQuantity: {product['quantity']}\nPrice: ${product['price']:.2f}")
             found = True
-
-    if not found:
-        print("Product not found. Do you want to register it? (yes/no)")
-        answer = input().strip().lower()
-        if answer == "yes":
-            register()
-        elif answer == "no":
-            main()
-    else:
-        main()
-
-def update():
-    # Function to update a product's price or quantity
-    print("\n---Update Product---")
-    ask = input("Enter product name to search: ").strip().lower()
-    found = False
-
-    for product in products:
-        if ask in product['name'].lower():
-            print(f"\nProduct found:\n"
-                  f"Name: {product['name']}\n"
-                  f"Quantity available: {product['quantity']}\n"
-                  f"Price: ${product['price']}\n")
-            found = True
-
-            data_change = input("Which value do you want to change (quantity/price)? ").strip().lower()
-            if data_change in product:
-                new_value = input("What value do you want to change it to? ").strip()
-                if data_change == 'quantity':
-                    try:
-                        new_value = int(new_value)
-                    except ValueError:
-                        print("Error: value must be a number.")
-                        return
-                elif data_change == 'price':
-                    try:
-                        new_value = float(new_value)
-                    except ValueError:
-                        print("Error: value must be a decimal number.")
-                        return
-                product[data_change] = new_value
-                print(f"{data_change.capitalize()} has been updated successfully.\n")
-            else:
-                print("This value can't be changed!")
-            break
-
-    if not found:
-        print("Product not found. Do you want to register it? (yes/no)")
-        answer = input().strip().lower()
-        if answer == "yes":
-            register()
-        elif answer == "no":
-            main()
-    else:
-        main()
-
-def delete():
-    # Function to delete a product by name
-    print("\n---Delete Product---")
-    name_to_delete = input("Enter product name to delete: ").strip().lower()
-    found = False
-
-    for product in products:
-        if name_to_delete == product['name'].lower():
-            found = True
-            confirm = input("Are you sure you want to delete this product? (yes/no): ").strip().lower()
-            if confirm == "yes":
-                products.remove(product)
-                print("Product successfully deleted.")
-            else:
-                print("Deletion cancelled.")
-            break
-
     if not found:
         print("Product not found.")
-    main()
+        choice = input("Do you want to register it? (yes/no): ").strip().lower()
+        if choice == "yes":
+            register()
+
+def update():
+    print("\n--- Update Product ---")
+    name = input("Enter product name to update: ").strip().lower()
+    if not name:
+        print("Invalid input. Name cannot be empty.")
+        return
+
+    found = False
+    for product in products:
+        if name == product['name'].lower():
+            found = True
+            print(f"\nProduct found:\nName: {product['name']}\nQuantity: {product['quantity']}\nPrice: ${product['price']:.2f}")
+            field = input("Enter field to update (price or quantity): ").strip().lower()
+
+            if field not in ['price', 'quantity']:
+                print("Invalid field. Only 'price' or 'quantity' can be updated.")
+                return
+
+            new_value = input(f"Enter new value for {field}: ").strip()
+            if not new_value:
+                print("Invalid input. Value cannot be empty.")
+                return
+
+            if field == "quantity":
+                try:
+                    new_value = int(new_value)
+                    if new_value < 0:
+                        print("Invalid quantity. Must be a positive number.")
+                        return
+                except ValueError:
+                    print("Invalid input. Quantity must be a number.")
+                    return
+            elif field == "price":
+                try:
+                    new_value = float(new_value)
+                    if new_value <= 0:
+                        print("Invalid price. Must be a positive decimal number.")
+                        return
+                except ValueError:
+                    print("Invalid input. Price must be a decimal number.")
+                    return
+
+            product[field] = new_value
+            print(f"{field.capitalize()} updated successfully.")
+            return
+    if not found:
+        print("Product not found.")
+
+def delete():
+    print("\n--- Delete Product ---")
+    name = input("Enter product name to delete: ").strip().lower()
+    if not name:
+        print("Invalid input. Name cannot be empty.")
+        return
+
+    for i, product in enumerate(products):
+        if product['name'].lower() == name:
+            confirm = input("Are you sure you want to delete this product? (yes/no): ").strip().lower()
+            if confirm == "yes":
+                del products[i]
+                print("Product deleted successfully.")
+                return
+            else:
+                print("Deletion canceled.")
+                return
+    print("Product not found.")
 
 def generate():
-    # Function to generate an inventory report
-    try:
-        action = input("Do you want to see inventory report? (yes/no): ").strip().lower()
-        if action == "no":
-            main()
-        elif action == "yes":
-            print("\n---Inventory Report---")
-            total_cost = 0
-            for product in products:
-                cost = product['quantity'] * product['price']
-                total_cost += cost
-                print(f"{product['name']} - {product['quantity']} units - $ {cost}")
-            print(f"Total inventory value: ${total_cost}")
-    except ValueError:
-        print("Invalid value. Must be (yes/no)")
-    main()
+    print("\n--- Inventory Report ---")
+    total = 0
+    for product in products:
+        item_total = product['quantity'] * product['price']
+        total += item_total
+        print(f"{product['name']} - {product['quantity']} units - ${item_total:.2f}")
+    print(f"Total inventory value: ${total:.2f}")
 
 def main():
-    # Main menu function
     while True:
-        print("\n---Options Menu---")
-        print("1. Register new products")
+        print("\n--- Inventory Menu ---")
+        print("1. Register new product")
         print("2. Search product")
-        print("3. Update information")
+        print("3. Update product")
         print("4. Delete product")
         print("5. Generate inventory report")
         print("6. Exit")
 
-        option = input("Choose an option (1-6): ")
-
+        option = input("Choose an option (1-6): ").strip()
         if option == "1":
             register()
         elif option == "2":
@@ -330,12 +307,35 @@ def main():
         elif option == "5":
             generate()
         elif option == "6":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid option. Please choose a number between 1 and 6.")
+
+main()
+        print("4. Delete product")
+        print("5. Generate inventory report")
+        print("6. Exit")
+        
+        opcion = input("Choose an option (1-6): ").strip()
+        
+        if opcion == "1":
+            register()
+        elif opcion == "2":
+            search()
+        elif opcion == "3":
+            update()
+        elif opcion == "4":
+            delete()
+        elif opcion == "5":
+            generate()
+        elif opcion == "6":
             print("See you later!")
             break
         else:
-            print("Invalid option. Try again.")
-
+            print("Invalid option. Please enter a number between 1 and 6.")
 main()
+
 ```
 ```python
 def update():
