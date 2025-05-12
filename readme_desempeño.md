@@ -150,3 +150,190 @@ def main (): #main menu function
 
 main()
 ```
+```python
+# Dictionary with 5 default products
+products = [
+    {"name": "sal", "quantity": 100, "price": 2550},
+    {"name": "bocadillo", "quantity": 200, "price": 4990},
+    {"name": "galletas", "quantity": 150, "price": 6250},
+    {"name": "desodorante", "quantity": 50, "price": 4490},
+    {"name": "electrolit", "quantity": 250, "price": 8700},
+]
+
+def register():
+    # Function to register a new product
+    print("\n---Register a new product---")
+    name = input("Enter product name: ").strip()
+    
+    try:
+        quantity = int(input("Enter the quantity of products: "))
+        if quantity < 0:
+            print("Invalid quantity. Please enter a valid quantity.")
+            return
+    except ValueError:
+        print("Invalid input. Quantity must be a number.")
+        return
+
+    try:
+        price = float(input("Enter price: "))
+        if price <= 0:
+            print("Invalid price. Price must be a positive number.")
+            return
+    except ValueError:
+        print("Invalid input. Price must be a number.")
+        return
+
+    for product in products:
+        if product['name'].lower() == name.lower():
+            print("Product already exists in the inventory.")
+            return
+
+    # Add the new product to the list
+    new_product = {
+        "name": name,
+        "quantity": quantity,
+        "price": round(price, 2)
+    }
+    products.append(new_product)
+    print(f"\nProduct '{name}' registered successfully.")
+    main()
+
+def search():
+    # Function to search a product by name
+    print("\n---Search Product---")
+    ask = input("Enter product name to search: ").strip().lower()
+    found = False
+
+    for product in products:
+        if ask in product['name'].lower():
+            print(f"\nProduct found:\n"
+                  f"Name: {product['name']}\n"
+                  f"Quantity available: {product['quantity']}\n"
+                  f"Price: ${product['price']}\n")
+            found = True
+
+    if not found:
+        print("Product not found. Do you want to register it? (yes/no)")
+        answer = input().strip().lower()
+        if answer == "yes":
+            register()
+        elif answer == "no":
+            main()
+    else:
+        main()
+
+def update():
+    # Function to update a product's price or quantity
+    print("\n---Update Product---")
+    ask = input("Enter product name to search: ").strip().lower()
+    found = False
+
+    for product in products:
+        if ask in product['name'].lower():
+            print(f"\nProduct found:\n"
+                  f"Name: {product['name']}\n"
+                  f"Quantity available: {product['quantity']}\n"
+                  f"Price: ${product['price']}\n")
+            found = True
+
+            data_change = input("Which value do you want to change (quantity/price)? ").strip().lower()
+            if data_change in product:
+                new_value = input("What value do you want to change it to? ").strip()
+                if data_change == 'quantity':
+                    try:
+                        new_value = int(new_value)
+                    except ValueError:
+                        print("Error: value must be a number.")
+                        return
+                elif data_change == 'price':
+                    try:
+                        new_value = float(new_value)
+                    except ValueError:
+                        print("Error: value must be a decimal number.")
+                        return
+                product[data_change] = new_value
+                print(f"{data_change.capitalize()} has been updated successfully.\n")
+            else:
+                print("This value can't be changed!")
+            break
+
+    if not found:
+        print("Product not found. Do you want to register it? (yes/no)")
+        answer = input().strip().lower()
+        if answer == "yes":
+            register()
+        elif answer == "no":
+            main()
+    else:
+        main()
+
+def delete():
+    # Function to delete a product by name
+    print("\n---Delete Product---")
+    name_to_delete = input("Enter product name to delete: ").strip().lower()
+    found = False
+
+    for product in products:
+        if name_to_delete == product['name'].lower():
+            found = True
+            confirm = input("Are you sure you want to delete this product? (yes/no): ").strip().lower()
+            if confirm == "yes":
+                products.remove(product)
+                print("Product successfully deleted.")
+            else:
+                print("Deletion cancelled.")
+            break
+
+    if not found:
+        print("Product not found.")
+    main()
+
+def generate():
+    # Function to generate an inventory report
+    try:
+        action = input("Do you want to see inventory report? (yes/no): ").strip().lower()
+        if action == "no":
+            main()
+        elif action == "yes":
+            print("\n---Inventory Report---")
+            total_cost = 0
+            for product in products:
+                cost = product['quantity'] * product['price']
+                total_cost += cost
+                print(f"{product['name']} - {product['quantity']} units - $ {cost}")
+            print(f"Total inventory value: ${total_cost}")
+    except ValueError:
+        print("Invalid value. Must be (yes/no)")
+    main()
+
+def main():
+    # Main menu function
+    while True:
+        print("\n---Options Menu---")
+        print("1. Register new products")
+        print("2. Search product")
+        print("3. Update information")
+        print("4. Delete product")
+        print("5. Generate inventory report")
+        print("6. Exit")
+
+        option = input("Choose an option (1-6): ")
+
+        if option == "1":
+            register()
+        elif option == "2":
+            search()
+        elif option == "3":
+            update()
+        elif option == "4":
+            delete()
+        elif option == "5":
+            generate()
+        elif option == "6":
+            print("See you later!")
+            break
+        else:
+            print("Invalid option. Try again.")
+
+main()
+```
