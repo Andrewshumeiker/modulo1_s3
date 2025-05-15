@@ -293,3 +293,96 @@ while wile_agregar_estudiante_menu:                     #while para devolverse a
                         print("Esa nota no aparece, intentelo de nuevo")
                         print("---"*30)
 ```
+```python
+import re
+from datetime import time
+
+# Custom exception for invalid operations
+class FlightError(Exception):
+    pass
+
+# Data structure
+flights = {
+    "AV-101": {
+        "origin": "Lima",
+        "destination": "Bogotá",
+        "seats": ["A1", "A2", "B1", "B2"],
+        "reserved": [],
+        "schedule": (15, 30)
+    }
+}
+
+# Validations
+def is_valid_flight_code(code):
+    return re.match(r'^[A-Z]{2}-\d{3}$', code)
+
+def is_valid_time(hour, minute):
+    return 0 <= hour < 24 and 0 <= minute < 60
+
+def is_valid_seat(seat):
+    return re.match(r'^[A-Z]\d+$', seat)
+
+# Register a reservation
+def reserve_seat():
+    code = input("Enter flight code (e.g., AV-101): ").strip().upper()
+    if code not in flights:
+        print("Flight not found.")
+        return
+    seat = input("Enter seat to reserve (e.g., A1): ").strip().upper()
+    if not is_valid_seat(seat):
+        print("Invalid seat format.")
+        return
+    flight = flights[code]
+    if seat not in flight["seats"]:
+        print("This seat does not exist.")
+    elif seat in flight["reserved"]:
+        print("This seat is already reserved.")
+    else:
+        flight["reserved"].append(seat)
+        print(f"Seat {seat} reserved successfully on flight {code}.")
+
+# Show occupancy percentage
+def show_occupancy():
+    for code, data in flights.items():
+        total = len(data["seats"])
+        reserved = len(data["reserved"])
+        percentage = (reserved / total) * 100 if total else 0
+        print(f"Flight {code}: {percentage:.2f}% occupied.")
+
+# Generate a sorted report by time
+def generate_report():
+    sorted_flights = sorted(flights.items(), key=lambda x: time(*x[1]["schedule"]))
+    with open("flight_report.txt", "w") as file:
+        for code, data in sorted_flights:
+            line = (f"{code} | {data['origin']} -> {data['destination']} | "
+                    f"Time: {data['schedule'][0]:02}:{data['schedule'][1]:02} | "
+                    f"Reserved: {len(data['reserved'])}/{len(data['seats'])}\n")
+            file.write(line)
+    print("Report generated as flight_report.txt.")
+
+# Menu
+def flight_menu():
+    while True:
+        print("\n--- Flight Reservation System ---")
+        print("1. Reserve a seat")
+        print("2. Show occupancy percentage")
+        print("3. Generate report")
+        print("4. Exit")
+        choice = input("Choose an option: ")
+        if choice == "1":
+            reserve_seat()
+        elif choice == "2":
+            show_occupancy()
+        elif choice == "3":
+            generate_report()
+        elif choice == "4":
+            print("Exiting...")
+            break
+        else:
+            print("Invalid option. Try again.")
+
+# Entry point
+if __name__ == "__main__":
+    flight_menu()
+    
+```
